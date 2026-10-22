@@ -34,7 +34,7 @@ const SCRIPT_URL = (document.currentScript && document.currentScript.src) || doc
        branch. Verify https://cdn.jsdelivr.net/gh/onyxailabs/onyxpdf@<PIN>/vendor/bgremove/resources.json
        returns HTTP 200 with `access-control-allow-origin: *` after pushing.
    ===================================================================== */
-const BG_ASSET_PIN = "main"; // TODO(deploy): pin to the commit hash/tag containing vendor/bgremove/
+const BG_ASSET_PIN = "b7d7256f9c79381a37d80ef57e579f7810c85a98"; // pinned to the commit whose tree contains the complete vendor/bgremove/ set
 const BG_CDN_BASE = "https://cdn.jsdelivr.net/gh/onyxailabs/onyxpdf@" + BG_ASSET_PIN + "/vendor/bgremove/";
 const BG_LOCAL_BASE = new URL("../vendor/bgremove/", SCRIPT_URL).href;
 const MODEL_PATH = "/models/isnet-general-use.fp16.onnx";
