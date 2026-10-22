@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OnyxPDF — Free PDF Tools That Never Upload Your Files | Onyx AI Labs</title>
+<meta name="description" content="30+ PDF tools that run 100% in your browser. Merge, split, compress, edit, sign, OCR and scan — no uploads, no sign-up, no watermarks, no daily limits.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OnyxPDF">
+<meta property="og:title" content="OnyxPDF — Free PDF Tools by Onyx AI Labs">
+<meta property="og:description" content="Every PDF tool. Zero uploads. 30+ tools that run 100% in your browser — no sign-up, no watermarks, no daily limits. By Onyx AI Labs.">
+<meta property="og:image" content="icons/icon-512.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OnyxPDF — Free PDF Tools by Onyx AI Labs">
+<meta name="twitter:description" content="Every PDF tool. Zero uploads. 30+ PDF tools that run 100% in your browser. By Onyx AI Labs.">
+<meta name="twitter:image" content="icons/icon-512.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect x='12' y='12' width='24' height='24' rx='3' transform='rotate(45 24 24)' fill='none' stroke='%2322d3ee' stroke-width='4'/%3E%3Crect x='19' y='19' width='10' height='10' rx='1.5' transform='rotate(45 24 24)' fill='%2322d3ee'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0a1628">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="OnyxPDF">
+</head>
+<body>
+
+<header>
+  <div class="header-in">
+    <a class="brand" href="#" id="brand-home">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <rect x="11" y="11" width="26" height="26" rx="3.5" transform="rotate(45 24 24)" stroke="var(--accent)" stroke-width="3.4"/>
+        <rect x="18.5" y="18.5" width="11" height="11" rx="1.6" transform="rotate(45 24 24)" fill="var(--accent)"/>
+      </svg>
+      <div>
+        <h1>ONYX<span>PDF</span></h1>
+        <small>by Onyx AI Labs</small>
+      </div>
+    </a>
+    <div class="privacy-pill" title="Every tool runs locally in your browser using JavaScript. No server receives your files — you can verify this in your browser's Network tab.">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.4"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+      <span><b>100% private</b> — files never leave this device</span>
+    </div>
+    <div class="header-spacer"></div>
+    <div class="theme-box" aria-label="Appearance">
+      <span class="lbl">Accent</span>
+      <button class="accent-dot" data-accent="cyan" style="--c:#22d3ee" title="Cyan" aria-label="Cyan accent"></button>
+      <button class="accent-dot" data-accent="violet" style="--c:#a78bfa" title="Violet" aria-label="Violet accent"></button>
+      <button class="accent-dot" data-accent="emerald" style="--c:#34d399" title="Emerald" aria-label="Emerald accent"></button>
+      <button class="accent-dot" data-accent="amber" style="--c:#fbbf24" title="Amber" aria-label="Amber accent"></button>
+      <button class="mode-btn" id="mode-toggle" title="Toggle dark / light">☀ Light</button>
+    </div>
+  </div>
+</header>
+
+<div id="install-bar" hidden>
+  <span id="install-hint">Install OnyxPDF for one-tap access — works offline, no uploads.</span>
+  <button id="btn-install-app" class="btn small" hidden>Install app</button>
+  <button id="btn-install-dismiss" aria-label="Dismiss">✕</button>
+</div>
+
+<main>
+  <!-- ===================== HOME ===================== -->
+  <section id="view-home">
+    <div id="ad-slot-top" class="ad-slot" hidden></div>
+    <div class="hero">
+      <h2>Every PDF tool. <span class="grad">Zero uploads.</span></h2>
+      <p>The big PDF sites make you upload your documents to their servers — then cap your tasks, stamp watermarks and charge monthly. OnyxPDF runs entirely in your browser: no uploads, no sign-up, no watermarks, no daily limits. Even the scanner features CamScanner charges $4.99/mo for are free here.</p>
+      <div class="search-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.8-3.8"/></svg>
+        <input id="tool-search" type="text" placeholder="Search tools — try “merge”, “ocr”, “sign”, “word”…" autocomplete="off">
+      </div>
+    </div>
+
+    <div id="pinned-wrap" class="hidden">
+      <div class="section-title">★ Pinned tools</div>
+      <div class="grid" id="grid-pinned"></div>
+    </div>
+
+    <div class="section-title">All tools <span class="count" id="tool-count"></span></div>
+    <div class="grid" id="grid-all"></div>
+
+    <div id="recents-wrap" class="hidden">
+      <div class="section-title">Recent files <span style="letter-spacing:0;text-transform:none;font-weight:600">(names only — stored on this device)</span></div>
+      <div class="recents" id="recents"></div>
+    </div>
+
+    <div class="section-title">Why OnyxPDF</div>
+    <div class="grid">
+      <div class="tool-card" style="cursor:default"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6l7-3z"/></svg></div><h3>Private by architecture</h3><p>Your files are processed by JavaScript on this device. There is no upload server — open your browser's Network tab and check. Works offline once loaded.</p></div>
+      <div class="tool-card" style="cursor:default"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M13 2L4.5 13.5H11L9.5 22 19 10h-6.5L13 2z"/></svg></div><h3>No limits, no paywall tricks</h3><p>Smallpdf stops free users at 2 tasks a day. Sejda at 3 per hour. Here there is no counter at all — the only limit is your device's memory.</p></div>
+      <div class="tool-card" style="cursor:default"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2M3 12h18"/></svg></div><h3>Scanner features, free</h3><p>Perspective fix, document filters and multi-language OCR (English, Urdu, Arabic, Hindi + more) — the features CamScanner puts behind Premium are built in here.</p></div>
+      <div class="tool-card" style="cursor:default"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div><h3>No watermarks. Ever.</h3><p>Some "free" tools stamp their brand on your documents. OnyxPDF output is exactly your document — nothing added, nothing hidden.</p></div>
+    </div>
+  </section>
+
+  <!-- ===================== TOOL VIEW ===================== -->
+  <section id="view-tool" class="hidden">
+    <div class="tool-head">
+      <button class="back-btn" id="btn-back">← All tools</button>
+      <h2 id="tool-title"></h2>
+      <p class="blurb" id="tool-blurb"></p>
+    </div>
+    <div id="tool-root"></div>
+  </section>
+</main>
+
+<footer>
+  <div id="ad-slot-footer" class="ad-slot" hidden></div>
+  <div class="footer-in">
+    <span><b style="color:var(--accent)">OnyxPDF</b> · Onyx AI Labs</span>
+    <span>Files are processed locally in your browser — nothing is uploaded, tracked or stored on any server.</span>
+    <span style="flex:1"></span>
+    <span>Tip: pin your favourite tools with the ★ on each card.</span>
+  </div>
+</footer>
+
+<div id="toast" role="status"></div>
+
+<script src="vendor/pdf-lib.min.js"></script>
+<script src="vendor/pdf.min.js"></script>
+<script src="js/helpers.js"></script>
+<script src="js/app.js"></script>
+<script src="js/tools-core.js"></script>
+<script src="js/tools-raster.js"></script>
+<script src="js/tools-stamp.js"></script>
+<script src="js/tools-text.js"></script>
+<script src="js/tools-interactive.js"></script>
+<script src="js/tools-place.js"></script>
+<script src="js/tools-scan.js"></script>
+<script src="js/tools-encrypt.js"></script>
+<script src="js/ads-config.js"></script>
+<script src="js/ads.js"></script>
+<script src="js/install.js"></script>
+</body>
+</html>
