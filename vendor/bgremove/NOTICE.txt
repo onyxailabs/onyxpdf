@@ -1,0 +1,32 @@
+OnyxPDF Background Remover — third-party attributions
+======================================================
+
+MODEL — IS-Net ("general-use")
+  Project:  DIS (Dichotomous Image Segmentation), by Xuebin Qin et al.
+  Source:   https://github.com/xuebinqin/DIS
+  Licence:  Apache License 2.0 — full text in LICENSE-DIS.txt (the DIS
+            repository's own LICENSE.md). Note: the DIS README (section 7,
+            Term of Use) names "code and evaluation metric" for Apache
+            License 2.0; the trained weights are distributed by the same
+            project inside that same repository under its single license,
+            with no separate or non-commercial terms for the weights.
+  What we ship: the project's official `isnet-general-use` weights,
+            converted to ONNX by the rembg project (MIT; the fp32 ONNX
+            asset md5 fc16ebd8b0c10d971d3513d564d01e29 matches rembg's
+            published checksum) and further converted fp32 -> fp16 by
+            Onyx AI Labs with onnxconverter-common. The model file here is
+            split into <=4 MiB chunks listed in resources.json and is
+            reassembled in the browser.
+
+RUNTIME — ONNX Runtime Web 1.20.1
+  Project:  ONNX Runtime, by Microsoft Corporation
+  Source:   https://github.com/microsoft/onnxruntime
+  Licence:  MIT License — full text in LICENSE-onnxruntime.txt.
+  What we ship: the unmodified npm dist files ort.wasm.min.mjs,
+            ort-wasm-simd-threaded.mjs and ort-wasm-simd-threaded.wasm
+            (chunked the same way as the model).
+
+GLUE CODE — the loader, preprocessing and compositing in
+js/tools-bgremove.js is Onyx AI Labs' own work, written for OnyxPDF. It
+replicates the input/output handling published in the DIS project's
+Inference.py and in rembg's ISNet session (MIT).
