@@ -6,10 +6,17 @@
 (function () {
   'use strict';
 
-  /* --- service worker (relative path: works under any subpath) --- */
+  /* --- service worker: resolve sw.js from THIS script's URL, not the page's,
+     so registration also works on static tool pages (/merge-pdf/ etc.) --- */
   if ('serviceWorker' in navigator) {
+    var swUrl = 'sw.js';
+    try {
+      if (document.currentScript && document.currentScript.src) {
+        swUrl = document.currentScript.src.replace(/js\/install\.js(\?.*)?$/, 'sw.js');
+      }
+    } catch (e) { /* fall back to the page-relative path */ }
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('sw.js').catch(function () { /* offline support is a bonus, never break the app */ });
+      navigator.serviceWorker.register(swUrl).catch(function () { /* offline support is a bonus, never break the app */ });
     });
   }
 
