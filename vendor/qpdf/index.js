@@ -1,0 +1,32 @@
+import { createQpdfApi } from "./api.js";
+import { QpdfError } from "./errors.js";
+import { createInlineExecutor } from "./inline-executor.js";
+import { loadWasmModule, resolveWasmUrl } from "./wasm-loader.js";
+import { createWorkerPool } from "./worker-pool.js";
+import { workerScriptUrlFor } from "./worker-url.js";
+export { QpdfError } from "./errors.js";
+export { qpdfVersion } from "./wasm/meta.mjs";
+/**
+ * Loads qpdf.wasm and returns the API. Nothing is downloaded before this is called.
+ * Browsers run jobs in module Web Workers; Node (no global Worker) runs them inline.
+ */
+export async function createQpdf(options = {}) {
+    const wasmUrl = resolveWasmUrl(options.wasmUrl);
+    const size = options.workers ?? 1;
+    if (!Number.isInteger(size) || size < 1)
+        throw new RangeError("createQpdf() workers must be an integer >= 1");
+    const inline = options.inline ?? typeof Worker === "undefined";
+    if (inline)
+        return createQpdfApi(createInlineExecutor(await loadWasmModule(wasmUrl)));
+    if (typeof Worker === "undefined") {
+        throw new QpdfError("FAILED", "Web Workers are not available in this environment; use { inline: true }");
+    }
+    const pool = await createWorkerPool({
+        size,
+        wasmUrl: wasmUrl.href,
+        workerUrl: workerScriptUrlFor(import.meta.url),
+        // Keep this expression literal: bundlers detect `new Worker(new URL(..., import.meta.url))`.
+        spawn: () => new Worker(new URL("./worker.js", import.meta.url), { type: "module" }),
+    });
+    return createQpdfApi(pool);
+}
