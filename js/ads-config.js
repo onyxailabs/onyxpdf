@@ -22,7 +22,7 @@
    file, redeploy. Nothing else needs to change.
    ===================================================================== */
 window.ADSTERRA = {
-  bannerTopKey: '',
-  nativeKey: '',
-  socialBarKey: ''
+  bannerTopKey: 'https://www.highrevenueformat.com/783a47bd81920010340c3dea88eea71d/invoke.js',
+  nativeKey: 'https://pl31959841.profitableratecpmnetwork.com/1e6ca535b790d4fdfa7c72325b111444/invoke.js',
+  socialBarKey: 'https://pl31959842.profitableratecpmnetwork.com/6d/9c/fb/6d9cfb3ac5331995a30e29841c2bd81d.js'
 };
