@@ -1,0 +1,22 @@
+import { INPUT, jobSpec, OUTPUT, withProgress } from "./job.js";
+export function encryptJob(input, options) {
+    const bits = options.bits ?? 256;
+    if (bits !== 256 && bits !== 128)
+        throw new RangeError(`encrypt() bits must be 256 or 128, got ${bits}`);
+    const allow = options.allow ?? {};
+    const restrictions = bits === 128 ? { useAes: "y" } : {};
+    if (allow.print !== undefined)
+        restrictions.print = allow.print ? "full" : "none";
+    if (allow.modify !== undefined)
+        restrictions.modify = allow.modify ? "all" : "none";
+    if (allow.extract !== undefined)
+        restrictions.extract = allow.extract ? "y" : "n";
+    if (allow.annotate !== undefined)
+        restrictions.annotate = allow.annotate ? "y" : "n";
+    const job = {
+        inputFile: INPUT,
+        encrypt: { userPassword: options.userPassword, ownerPassword: options.ownerPassword, [`${bits}bit`]: restrictions },
+        outputFile: OUTPUT,
+    };
+    return jobSpec(withProgress(job, options), { [INPUT]: input });
+}
