@@ -3,12 +3,17 @@
    any subpath (e.g. https://onyxailabs.github.io/onyxpdf/).
    Strategy:
    - App shell + core libs: precached at install, cache-first.
-   - Heavy lazy engines (Tesseract cores/data, qpdf wasm): runtime-cached
-     on first use, cache-first afterwards.
+   - Page navigations: NETWORK-FIRST (SEO rule, SEO-STRATEGY.md §5) so a
+     returning visitor landing on /merge-pdf/ gets the real static tool page,
+     never the generic shell; the cached copy is only an offline fallback,
+     and the shell is the last resort for paths we have never cached.
+   - Heavy lazy engines (Tesseract cores/data, qpdf wasm, heic2any, the
+     background-removal model): runtime-cached on first use, cache-first
+     afterwards — never precached.
    Bump CACHE_VERSION on every deploy that changes cached files. */
 'use strict';
 
-const CACHE_VERSION = 'onyxpdf-v1';
+const CACHE_VERSION = 'onyxpdf-v3';
 const SHELL_CACHE = CACHE_VERSION + '-shell';
 const RUNTIME_CACHE = CACHE_VERSION + '-runtime';
 
@@ -19,8 +24,12 @@ const SHELL_ASSETS = [
   './css/style.css',
   './js/app.js',
   './js/helpers.js',
+  './js/seo-slugs.js',
   './js/tools-core.js',
   './js/tools-raster.js',
+  './js/tools-image.js',
+  './js/tools-image2.js',
+  './js/tools-bgremove.js',
   './js/tools-stamp.js',
   './js/tools-text.js',
   './js/tools-interactive.js',
@@ -45,7 +54,9 @@ const SHELL_ASSETS = [
 const RUNTIME_PREFIXES = [
   'vendor/tess-core/',
   'vendor/tessdata/',
-  'vendor/qpdf/'
+  'vendor/qpdf/',
+  'vendor/heic/',
+  'vendor/bgremove/'
 ];
 
 self.addEventListener('install', (event) => {
@@ -70,12 +81,21 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  if (url.origin !== self.location.origin) return; // never touch cross-origin (ads etc.)
+  if (url.origin !== self.location.origin) return; // never touch cross-origin (ads, CDN fallback, etc.)
 
-  // Page navigations: cache-first, fall back to network, then to the shell.
+  // Page navigations: network-first. The fresh static page wins; a cached
+  // copy of THAT page is the offline fallback; the app shell is last resort.
   if (req.mode === 'navigate') {
     event.respondWith(
-      caches.match('./index.html').then((hit) => hit || fetch(req))
+      fetch(req)
+        .then((res) => {
+          if (res && res.ok) {
+            const copy = res.clone();
+            caches.open(SHELL_CACHE).then((cache) => cache.put(req, copy));
+          }
+          return res;
+        })
+        .catch(() => caches.match(req).then((hit) => hit || caches.match('./index.html')))
     );
     return;
   }

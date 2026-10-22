@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://onyxailabs.github.io/onyxpdf/sitemap.xml
